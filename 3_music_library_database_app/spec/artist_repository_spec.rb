@@ -30,7 +30,7 @@ describe ArtistRepository do
     expect(artist.name).to eq('Taylor Swift')
   end
 
-  xit 'creates an album' do
+  it 'creates an album' do
     repo = ArtistRepository.new
 
     artist = Artist.new

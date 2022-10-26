@@ -21,11 +21,11 @@ describe Application do
             expect(response.body).to eq 'Hello Anna'    
         end
 
-        it 'contains a h1 title' do
-            response = get('/hello')
+        # it 'contains a h1 title' do
+        #     response = get('/hello')
         
-            expect(response.body).to include('<h1>Hello!</h1>')
-        end
+        #     expect(response.body).to include('<h1>Hello!</h1>')
+        # end
     end
 
     context "GET /names" do
