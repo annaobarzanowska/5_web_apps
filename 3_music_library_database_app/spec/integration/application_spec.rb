@@ -40,9 +40,31 @@ describe Application do
             
       expect(response.status).to eq 200
       expect(response.body).to include 'Doolittle'
-      expect(response.body).to include '1989'
       expect(response.body).to include 'Surfer Rosa'
-      expect(response.body).to include '1988'
+    end
+  end
+
+  context "GET /albums/new" do
+    it "should return a form to add a new album" do
+      response = get('/albums/new')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include "<form method='POST' action='/albums'>"
+      expect(response.body).to include "<input type='text' name='title'/>"
+      expect(response.body).to include "<input type='text' name='release_year'/>"
+      expect(response.body).to include "<input type='text' name='artist_id'/>"
+    end
+  end
+
+  context "GET /artists/new" do
+    it "should return a form to add a new artist" do
+      response = get('/artists/new')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include "<form method='POST' action='/artists'/>"
+      expect(response.body).to include "<input type='text' name='name'/>"
+      expect(response.body).to include "<input type='text' name='genre'/>"
+
     end
   end
 
@@ -66,6 +88,17 @@ describe Application do
   end
   end
 
+  context "GET /artists/:id" do
+    it "returns the artist with id 1" do
+      response = get('/artists/1')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Pixies'
+      expect(response.body).to include 'Rock'
+
+    end
+  end
+
   context "POST /albums" do
     it "creates an album named Voyage, release year 2022 and artist id 2" do
         response = post('/albums', title: 'Voyage', release_year: '2022', artist_id: '2')
@@ -82,11 +115,23 @@ describe Application do
         response = get('/artists')
 
         expect(response.status).to eq 200
-        expect(response.body).to eq "Pixies, ABBA, Taylor Swift, Nina Simone"
+        expect(response.body).to include "Pixies" 
+        expect(response.body).to include "ABBA" 
+        expect(response.body).to include "Taylor Swift" 
+        expect(response.body).to include "Nina Simone"
     end    
   end
 
-  context "when user clicks on link" do
+  context "when user clicks on artist link" do
+    it "exists as a page" do
+      response = get('/artists')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include '/artists/1'
+    end
+  end
+
+  context "when user clicks on album link" do
     it "exists as a page" do
       response = get('/albums')
 
@@ -109,19 +154,3 @@ describe Application do
 end
 
 
-
-# # Request:
-# POST /artists
-
-# # With body parameters:
-# name=Wild nothing
-# genre=Indie
-
-# # Expected response (200 OK)
-# (No content)
-
-# # Then subsequent request:
-# GET /artists
-
-# # Expected response (200 OK)
-# Pixies, ABBA, Taylor Swift, Nina Simone, Wild nothing
